@@ -1,81 +1,88 @@
 package org.example;
+
+import javax.swing.*;
+import javax.swing.text.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.*;
+public class Search {
+    private JDialog dialog;
+    private JTextArea textArea;
+    private JTextField findEdit;
+    private Highlighter highlighter;
+    private DefaultHighlighter.DefaultHighlightPainter highlightPainter;
+    private int start = 0;
 
-public class Search{
-    Container con;
-    JDialog dialog;
-    JPanel panel1,panel2;
-    JTextArea text;
-    JLabel label1;
-    JTextField findEdit;
-    JCheckBox checkBox;
-    ButtonGroup dirBtnGroup;
-    JButton searchbtn,CancleBtn;
-    int start;
-    public Search(JFrame owner, JTextArea Jtext) {
+    public Search(JFrame owner, JTextArea textArea) {
         dialog = new JDialog(owner);
-        text=Jtext;
-        start = 0;
-        panel1=new JPanel();
-        panel1.setLayout(new FlowLayout());
-        panel2=new JPanel();
-        panel2.setLayout(new FlowLayout());
+        this.textArea = textArea;
+        findEdit = new JTextField(12);
 
-        panel1=new JPanel();
+        JPanel panel1 = new JPanel();
         panel1.setLayout(new FlowLayout());
-        panel2=new JPanel();
-        panel2.setLayout(new FlowLayout());
-        //build panel
-        label1=new JLabel("Searching Text");
-        findEdit=new JTextField(12);
-        searchbtn=new JButton("Search(top->bottom)");
-        searchbtn.addActionListener(new ActionListener() {
+
+        JLabel label1 = new JLabel("Searching Text");
+
+        JButton searchBtn = new JButton("top-down search");
+        searchBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                String text = textArea.getText();
                 int index;
-                if (start>text.getCaretPosition())
-                    start = text.getCaretPosition();
+                if (start > text.length())
+                    start = text.length();
 
-                index=text.getText().indexOf(findEdit.getText(),start);
-                IndexNum(index);
+                index = text.indexOf(findEdit.getText(), start);
+                if (index >= 0) {
+                    highlightText(index, findEdit.getText().length());
+                    start = index + findEdit.getText().length();
+                } else {
+                    JOptionPane.showMessageDialog(dialog, "No more occurrences found.");
+                    start = 0;
+                }
             }
         });
-        //design action
+
         panel1.add(label1);
         panel1.add(findEdit);
-        panel1.add(searchbtn);
+        panel1.add(searchBtn);
 
-        CancleBtn=new JButton("Cancel");
-        CancleBtn.addActionListener(new ActionListener() {
+        JPanel panel2 = new JPanel();
+        panel2.setLayout(new FlowLayout());
+
+        JButton cancelBtn = new JButton("Cancel");
+        cancelBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 dialog.dispose();
             }
         });
-        //design cancel
-        panel2.add(CancleBtn);
 
-        con=dialog.getContentPane();
+        panel2.add(cancelBtn);
+
+        Container con = dialog.getContentPane();
         con.setLayout(new FlowLayout());
         con.add(panel1);
         con.add(panel2);
+
         dialog.setTitle("Search");
-        dialog.setSize(400,150);
+        dialog.setSize(400, 150);
+        dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
-        //set dialog
+
+        // 初始化高亮显示
+        highlighter = textArea.getHighlighter();
+        highlightPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.PINK);
     }
 
+    private void highlightText(int startIndex, int length) {
+        // 清除之前的高亮显示
+        highlighter.removeAllHighlights();
 
-    public void IndexNum(int index){
-        if (index<0){
-            JOptionPane.showMessageDialog(dialog,"There are no more searching text in the file");
-            start=0;
-        }
-        else{
-            text.select(index, index+findEdit.getText().length());
-            start=index+findEdit.getText().length();
+        // 添加新的高亮显示
+        try {
+            highlighter.addHighlight(startIndex, startIndex + length, highlightPainter);
+        } catch (BadLocationException e) {
+            e.printStackTrace();
         }
     }
 }

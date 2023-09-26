@@ -2,6 +2,6 @@ package org.example;
 
 public class New{
     public New() {
-        new GUI();
+        new mainFrame();
     }
 }

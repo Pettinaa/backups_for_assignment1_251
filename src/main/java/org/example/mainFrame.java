@@ -11,7 +11,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import com.itextpdf.text.DocumentException;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
-public class GUI{
+public class mainFrame{
 
     //create a frame
     public JFrame jFrame = new JFrame();
@@ -44,10 +44,10 @@ public class GUI{
     JMenuItem time2 = new JMenuItem("Time and data in the text");
 
     //create a text area for writing text
-    JTextArea jTextArea = new RSyntaxTextArea();
-    private FileDialog openDia, saveDia;
+    JTextArea jTextArea = new RSyntaxTextArea(20, 30);
+    private FileDialog openDia;
 
-    public GUI() {
+    public mainFrame() {
         //set up the frame
         jFrame.setTitle("Text Editor");
         jFrame.setSize(700, 400);
@@ -102,7 +102,6 @@ public class GUI{
         jFrame.setJMenuBar(jMenuBar);
 
         //set up the writing area
-        jTextArea = new RSyntaxTextArea(20, 30);
         ((RSyntaxTextArea) jTextArea).setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
         ((RSyntaxTextArea) jTextArea).setCodeFoldingEnabled(true);
 
@@ -112,9 +111,8 @@ public class GUI{
         //add JTextArea to JFrame
         jFrame.add(jScrollPane, BorderLayout.CENTER);
 
-        //open or save files and the position of files
+        //open files
         openDia = new FileDialog(jFrame,"Open",FileDialog.LOAD);
-        saveDia = new FileDialog(jFrame, "Save", FileDialog.SAVE);
 
         //make the JFrame can be seen
         jFrame.setVisible(true);
@@ -141,7 +139,7 @@ public class GUI{
             @Override
             public void actionPerformed(ActionEvent e) {
                 Save save = new Save();
-                save.save(jTextArea,saveDia);
+                save.save(jTextArea);
             }
         });
 
@@ -176,9 +174,9 @@ public class GUI{
         pdf.addActionListener(e -> {
             pdfSaver.showDialog(jFrame, "save as pdf");
             File file = pdfSaver.getSelectedFile();
-            PDFconversation pdf = new PDFconversation();
+            Conversation pdf = new Conversation();
             try {
-                pdf.pdfconversation(file, jTextArea.getText());
+                pdf.conversation(file, jTextArea.getText());
             } catch (FileNotFoundException e1) {
                 e1.printStackTrace();
             } catch (DocumentException e1) {
@@ -190,7 +188,7 @@ public class GUI{
         select.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                SCPC select = new SCPC();
+                Manage select = new Manage();
                 select.select(jTextArea);
             }
         });
@@ -199,7 +197,7 @@ public class GUI{
         copy.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                SCPC select = new SCPC();
+                Manage select = new Manage();
                 select.copy(jTextArea);
             }
         });
@@ -208,7 +206,7 @@ public class GUI{
         paste.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                SCPC select = new SCPC();
+                Manage select = new Manage();
                 select.paste(jTextArea);
             }
         });
@@ -217,7 +215,7 @@ public class GUI{
         cut.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                SCPC select = new SCPC();
+                Manage select = new Manage();
                 select.cut(jTextArea);
             }
         });
@@ -234,15 +232,7 @@ public class GUI{
         time1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JFrame frame = new JFrame("Calendar Display");
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.setSize(300, 300);
-
                 CalendarPanel calendarPanel = new CalendarPanel();
-                frame.add(calendarPanel);
-
-                frame.setVisible(true);
-
             }
         });
 
