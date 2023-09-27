@@ -10,7 +10,7 @@ import java.io.IOException;
 public class Open{
     private File file;
     public void opentxt(FileDialog openDia) {
-        mainFrame openWindow = new mainFrame();
+        TextEditor openWindow = new TextEditor();
         openDia.setVisible(true);
         //display the open window
         String dirpath = openDia.getDirectory();

@@ -9,10 +9,10 @@ import java.awt.event.ActionListener;
 public class Search {
     private JDialog dialog;
     private JTextArea textArea;
-    private JTextField findEdit;
+    public JTextField findEdit;
     private Highlighter highlighter;
     private DefaultHighlighter.DefaultHighlightPainter highlightPainter;
-    private int start = 0;
+    public int start = 0;
 
     public Search(JFrame owner, JTextArea textArea) {
         dialog = new JDialog(owner);

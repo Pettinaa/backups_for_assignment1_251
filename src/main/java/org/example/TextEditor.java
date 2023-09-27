@@ -11,7 +11,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import com.itextpdf.text.DocumentException;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
-public class mainFrame{
+public class TextEditor {
 
     //create a frame
     public JFrame jFrame = new JFrame();
@@ -44,10 +44,10 @@ public class mainFrame{
     JMenuItem time2 = new JMenuItem("Time and data in the text");
 
     //create a text area for writing text
-    JTextArea jTextArea = new RSyntaxTextArea(20, 30);
+    public JTextArea jTextArea = new RSyntaxTextArea(20, 30);
     private FileDialog openDia;
 
-    public mainFrame() {
+    public TextEditor() {
         //set up the frame
         jFrame.setTitle("Text Editor");
         jFrame.setSize(700, 400);
